@@ -1,5 +1,8 @@
 package com.multiversa.escola.repository;
 
-public interface NotaRepository {
+import com.multiversa.escola.model.Nota;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface NotaRepository extends JpaRepository<Nota, Long> {
 
 }
