@@ -1,7 +1,9 @@
 package com.multiversa.escola.service;
 
 import com.multiversa.escola.model.Disciplina;
+import com.multiversa.escola.model.Professor;
 import com.multiversa.escola.repository.DisciplinaRepository;
+import com.multiversa.escola.repository.ProfessorRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,12 +12,18 @@ import org.springframework.stereotype.Service;
 public class DisciplinaService {
 
   @Autowired
-  DisciplinaRepository disciplinaRepository;
+  private DisciplinaRepository disciplinaRepository;
 
-  public Disciplina saveDisciplina(Disciplina disciplina){
+  @Autowired
+  private ProfessorRepository professorRepository;
+
+  public Disciplina saveDisciplina(Disciplina disciplina, Long professorId) {
+    Professor professor = professorRepository.findById(professorId)
+        .orElseThrow(() -> new RuntimeException("Professor não encontrado"));
+
+    disciplina.setProfessor(professor);
     return disciplinaRepository.save(disciplina);
   }
-
   public Disciplina getDisciplina(long disciplinaId) {
     return disciplinaRepository.findById(disciplinaId).orElseThrow(() -> new
         RuntimeException("Disciplina nao encontrada"));
@@ -31,8 +39,6 @@ public class DisciplinaService {
     existingDisciplina.setNome(disciplina.getNome());
     existingDisciplina.setCargaHoraria(disciplina.getCargaHoraria());
     existingDisciplina.setProfessor(disciplina.getProfessor());
-    existingDisciplina.setNotas(disciplina.getNotas());
-    existingDisciplina.setTurmas(disciplina.getTurmas());
     disciplinaRepository.save(existingDisciplina);
     return existingDisciplina;
   }

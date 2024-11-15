@@ -19,22 +19,14 @@ public class Turma {
   @Column(name = "ano", nullable = false)
   private int ano;
 
-  @OneToMany(mappedBy = "turma", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "turma", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private List<Aluno> alunos;
 
-  @ManyToMany
+  @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinTable(
       name = "turma_disciplina",
       joinColumns = @JoinColumn(name = "turma_id"),
       inverseJoinColumns = @JoinColumn(name = "disciplina_id")
   )
   private List<Disciplina> disciplinas;
-
-  @ManyToMany
-  @JoinTable(
-      name = "turma_professor",
-      joinColumns = @JoinColumn(name = "turma_id"),
-      inverseJoinColumns = @JoinColumn(name = "professor_id")
-  )
-  private List<Professor> professores;
 }

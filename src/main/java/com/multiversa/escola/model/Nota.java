@@ -13,12 +13,10 @@ public class Nota {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne
-  @JoinColumn(name = "aluno_id")
+  @OneToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private Aluno aluno;
 
-  @ManyToOne
-  @JoinColumn(name = "disciplina_id")
+  @OneToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private Disciplina disciplina;
 
   @Column(name = "valor", nullable = false)

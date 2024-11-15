@@ -1,6 +1,8 @@
 package com.multiversa.escola.service;
 
 import com.multiversa.escola.model.Turma;
+import com.multiversa.escola.repository.AlunoRepository;
+import com.multiversa.escola.repository.DisciplinaRepository;
 import com.multiversa.escola.repository.TurmaRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +33,6 @@ public class TurmaService {
     existingTurma.setAno(turma.getAno());
     existingTurma.setAlunos(turma.getAlunos());
     existingTurma.setDisciplinas(turma.getDisciplinas());
-    existingTurma.setProfessores(turma.getProfessores());
     turmaRepository.save(existingTurma);
     return existingTurma;
   }

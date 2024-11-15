@@ -15,8 +15,11 @@ public class DisciplinaController {
   DisciplinaService disciplinaService;
 
   @PostMapping
-  public ResponseEntity<Disciplina> saveDisciplina(@RequestBody Disciplina disciplina) {
-    Disciplina savedDisciplina = disciplinaService.saveDisciplina(disciplina);
+  public ResponseEntity<Disciplina> saveDisciplina(
+      @RequestBody Disciplina disciplina,
+      @RequestParam Long professorId) {
+
+    Disciplina savedDisciplina = disciplinaService.saveDisciplina(disciplina, professorId);
     return ResponseEntity.ok(savedDisciplina);
   }
 

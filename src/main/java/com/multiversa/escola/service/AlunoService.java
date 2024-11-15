@@ -31,8 +31,6 @@ public class AlunoService {
     existingAluno.setMatricula(aluno.getMatricula());
     existingAluno.setEmail(aluno.getEmail());
     existingAluno.setDataNascimento(aluno.getDataNascimento());
-    existingAluno.setTurma(aluno.getTurma());
-    existingAluno.setNotas(aluno.getNotas());
     alunoRepository.save(existingAluno);
     return existingAluno;
   }

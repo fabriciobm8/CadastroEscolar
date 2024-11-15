@@ -18,14 +18,7 @@ public class Disciplina {
   @Column(name = "carga_horaria", nullable = false)
   private int cargaHoraria;
 
-  @ManyToOne
-  @JoinColumn(name = "professor_id")
+  @OneToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private Professor professor;
-
-  @OneToMany(mappedBy = "disciplina", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Nota> notas;
-
-  @ManyToMany(mappedBy = "disciplinas")
-  private List<Turma> turmas;
 
 }

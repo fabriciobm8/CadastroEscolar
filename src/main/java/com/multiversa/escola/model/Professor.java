@@ -18,13 +18,7 @@ public class Professor {
   @Column(name = "email")
   private String email;
 
-  @Column(name = "disciplina", nullable = false)
+  @Column(name = "disciplina_principal", nullable = false)
   private String disciplinaPrincipal;
-
-  @OneToMany(mappedBy = "professor", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Disciplina> disciplinas;
-
-  @ManyToMany(mappedBy = "professores")
-  private List<Turma> turmas;
 
 }

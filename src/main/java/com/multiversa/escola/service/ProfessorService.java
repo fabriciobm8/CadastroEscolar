@@ -31,8 +31,6 @@ public class ProfessorService {
     existingProfessor.setNome(professor.getNome());
     existingProfessor.setEmail(professor.getEmail());
     existingProfessor.setDisciplinaPrincipal(professor.getDisciplinaPrincipal());
-    existingProfessor.setDisciplinas(professor.getDisciplinas());
-    existingProfessor.setTurmas(professor.getTurmas());
     professorRepository.save(existingProfessor);
     return existingProfessor;
   }

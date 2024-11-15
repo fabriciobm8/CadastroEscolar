@@ -30,7 +30,4 @@ public class Aluno {
   @JoinColumn(name = "turma_id")
   private Turma turma;
 
-  @OneToMany(mappedBy = "aluno", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Nota> notas;
-
 }
