@@ -19,10 +19,10 @@ public class Turma {
   @Column(name = "ano", nullable = false)
   private int ano;
 
-  @OneToMany(mappedBy = "turma", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "turma", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private List<Aluno> alunos;
 
-  @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   @JoinTable(
       name = "turma_disciplina",
       joinColumns = @JoinColumn(name = "turma_id"),

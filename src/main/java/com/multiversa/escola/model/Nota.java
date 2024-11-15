@@ -2,6 +2,7 @@ package com.multiversa.escola.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 import lombok.Data;
 
 @Entity
@@ -13,10 +14,12 @@ public class Nota {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @OneToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "aluno_id", nullable = false)
   private Aluno aluno;
 
-  @OneToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "disciplina_id", nullable = false)
   private Disciplina disciplina;
 
   @Column(name = "valor", nullable = false)

@@ -1,6 +1,9 @@
 package com.multiversa.escola.service;
 
+import com.multiversa.escola.model.Aluno;
+import com.multiversa.escola.model.Disciplina;
 import com.multiversa.escola.model.Turma;
+import com.multiversa.escola.model.TurmaDTO;
 import com.multiversa.escola.repository.AlunoRepository;
 import com.multiversa.escola.repository.DisciplinaRepository;
 import com.multiversa.escola.repository.TurmaRepository;
@@ -13,8 +16,19 @@ public class TurmaService {
 
   @Autowired
   TurmaRepository turmaRepository;
+  @Autowired
+  AlunoRepository alunoRepository;
+  @Autowired
+  DisciplinaRepository disciplinaRepository;
 
-  public Turma saveTurma(Turma turma) {
+  public Turma saveTurma(TurmaDTO turmaDTO) {
+    Turma turma = new Turma();
+    turma.setNome(turmaDTO.getNome());
+    turma.setAno(turmaDTO.getAno());
+    List<Aluno> alunos = alunoRepository.findAllById(turmaDTO.getAlunoIds());
+    turma.setAlunos(alunos);
+    List<Disciplina> disciplinas = disciplinaRepository.findAllById(turmaDTO.getDisciplinaIds());
+    turma.setDisciplinas(disciplinas);
     return turmaRepository.save(turma);
   }
 

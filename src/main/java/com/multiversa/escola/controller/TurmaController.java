@@ -1,6 +1,7 @@
 package com.multiversa.escola.controller;
 
 import com.multiversa.escola.model.Turma;
+import com.multiversa.escola.model.TurmaDTO;
 import com.multiversa.escola.service.TurmaService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,8 @@ public class TurmaController {
   TurmaService turmaService;
 
   @PostMapping
-  public ResponseEntity<Turma> saveTurma(@RequestBody Turma turma) {
-    Turma savedTurma = turmaService.saveTurma(turma);
+  public ResponseEntity<Turma> saveTurma(@RequestBody TurmaDTO turmaDTO) {
+    Turma savedTurma = turmaService.saveTurma(turmaDTO);
     return ResponseEntity.ok(savedTurma);
   }
 

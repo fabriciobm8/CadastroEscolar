@@ -1,5 +1,6 @@
 package com.multiversa.escola.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
@@ -28,6 +29,7 @@ public class Aluno {
 
   @ManyToOne
   @JoinColumn(name = "turma_id")
+  @JsonIgnore
   private Turma turma;
 
 }

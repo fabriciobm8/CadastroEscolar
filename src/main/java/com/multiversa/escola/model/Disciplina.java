@@ -18,7 +18,7 @@ public class Disciplina {
   @Column(name = "carga_horaria", nullable = false)
   private int cargaHoraria;
 
-  @OneToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private Professor professor;
 
 }
