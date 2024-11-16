@@ -1,6 +1,8 @@
 package com.multiversa.escola.service;
 
+import com.multiversa.escola.model.Disciplina;
 import com.multiversa.escola.model.Professor;
+import com.multiversa.escola.repository.DisciplinaRepository;
 import com.multiversa.escola.repository.ProfessorRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,8 @@ public class ProfessorService {
 
   @Autowired
   ProfessorRepository professorRepository;
+  @Autowired
+  DisciplinaService disciplinaService;
 
   public Professor saveProfessor (Professor professor) {
     return professorRepository.save(professor);
@@ -38,6 +42,10 @@ public class ProfessorService {
   public void deleteProfessor(long professorId) {
     Professor existingProfessor = professorRepository.findById(professorId)
         .orElseThrow(() -> new RuntimeException("Professor não encontrado"));
+    // Remove todas as disciplinas associadas ao professor
+    for (Disciplina disciplina : existingProfessor.getDisciplinas()) {
+      disciplinaService.deleteDisciplina(disciplina.getId());
+    }
     professorRepository.delete(existingProfessor);
   }
 

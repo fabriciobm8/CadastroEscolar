@@ -22,7 +22,7 @@ public class Disciplina {
   @ManyToOne(optional = false, fetch = FetchType.EAGER)
   private Professor professor;
 
-  @OneToMany(mappedBy = "disciplina", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+  @OneToMany(mappedBy = "disciplina", cascade = {CascadeType.ALL}, orphanRemoval = true)
   @JsonIgnore
   private List<Nota> notas;
 

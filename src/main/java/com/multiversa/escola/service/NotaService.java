@@ -63,7 +63,8 @@ public class NotaService {
   }
 
   public void deleteNota(long notaId) {
-    Nota existingNota = notaRepository.findById(notaId).orElseThrow(() -> new RuntimeException("Nota não encontrada"));
+    Nota existingNota = notaRepository.findById(notaId)
+        .orElseThrow(() -> new RuntimeException("Nota não encontrada"));
     notaRepository.delete(existingNota);
   }
 }

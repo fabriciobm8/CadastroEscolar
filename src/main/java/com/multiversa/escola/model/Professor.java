@@ -22,7 +22,7 @@ public class Professor {
   @Column(name = "disciplina_principal", nullable = false)
   private String disciplinaPrincipal;
 
-  @OneToMany(mappedBy = "professor", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "professor", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
   @JsonIgnore
   private List<Disciplina> disciplinas;
 

@@ -61,11 +61,17 @@ public class TurmaService {
     return turmaRepository.save(existingTurma); // Salva as alterações
   }
 
-  public Turma deleteTurma(long turmaId) {
-    Turma existingTurma = turmaRepository.findById(turmaId).orElseThrow(() -> new
-        RuntimeException("Turma não encontrada"));
+  public void deleteTurma(long turmaId) {
+    Turma existingTurma = turmaRepository.findById(turmaId)
+        .orElseThrow(() -> new RuntimeException("Turma não encontrada"));
+    // Remove as referências dos alunos à turma
+    for (Aluno aluno : existingTurma.getAlunos()) {
+      aluno.setTurma(null);
+      alunoRepository.save(aluno);
+    }
+    // Remove as referências das disciplinas
+    existingTurma.getDisciplinas().clear();
     turmaRepository.delete(existingTurma);
-    return existingTurma;
   }
 
 }

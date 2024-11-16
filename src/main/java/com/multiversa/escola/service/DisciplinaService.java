@@ -2,8 +2,11 @@ package com.multiversa.escola.service;
 
 import com.multiversa.escola.model.Disciplina;
 import com.multiversa.escola.model.Professor;
+import com.multiversa.escola.model.Turma;
 import com.multiversa.escola.repository.DisciplinaRepository;
+import com.multiversa.escola.repository.NotaRepository;
 import com.multiversa.escola.repository.ProfessorRepository;
+import com.multiversa.escola.repository.TurmaRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,9 +16,12 @@ public class DisciplinaService {
 
   @Autowired
   private DisciplinaRepository disciplinaRepository;
-
   @Autowired
   private ProfessorRepository professorRepository;
+  @Autowired
+  private TurmaRepository turmaRepository;
+  @Autowired
+  private NotaRepository notaRepository;
 
   public Disciplina saveDisciplina(Disciplina disciplina, Long professorId) {
     Professor professor = professorRepository.findById(professorId)
@@ -47,11 +53,18 @@ public class DisciplinaService {
     return disciplinaRepository.save(existingDisciplina);
   }
 
-  public Disciplina deleteDisciplina(long disciplinaId) {
-    Disciplina existingDisciplina = disciplinaRepository.findById(disciplinaId).orElseThrow(() -> new
-        RuntimeException("Disciplina não encontrada"));
-    disciplinaRepository.deleteById(disciplinaId);
-    return existingDisciplina;
+  public void deleteDisciplina(long disciplinaId) {
+    Disciplina existingDisciplina = disciplinaRepository.findById(disciplinaId)
+        .orElseThrow(() -> new RuntimeException("Disciplina não encontrada"));
+    // Remove todas as notas associadas à disciplina
+    notaRepository.deleteAll(existingDisciplina.getNotas());
+    // Remove a disciplina de todas as turmas que a contêm
+    List<Turma> turmas = turmaRepository.findAll();
+    for (Turma turma : turmas) {
+      turma.getDisciplinas().remove(existingDisciplina);
+      turmaRepository.save(turma);
+    }
+    disciplinaRepository.delete(existingDisciplina);
   }
 
 }
