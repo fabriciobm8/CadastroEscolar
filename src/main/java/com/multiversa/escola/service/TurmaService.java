@@ -26,6 +26,9 @@ public class TurmaService {
     turma.setNome(turmaDTO.getNome());
     turma.setAno(turmaDTO.getAno());
     List<Aluno> alunos = alunoRepository.findAllById(turmaDTO.getAlunoIds());
+    for (Aluno aluno : alunos) {
+      aluno.setTurma(turma);
+    }
     turma.setAlunos(alunos);
     List<Disciplina> disciplinas = disciplinaRepository.findAllById(turmaDTO.getDisciplinaIds());
     turma.setDisciplinas(disciplinas);
@@ -41,14 +44,15 @@ public class TurmaService {
   }
 
   public Turma updateTurma(long turmaId, Turma turma) {
-    Turma existingTurma = turmaRepository.findById(turmaId).orElseThrow(() -> new
-        RuntimeException("Turma não encontrada"));
+    Turma existingTurma = turmaRepository.findById(turmaId).orElseThrow(() -> new RuntimeException("Turma não encontrada"));
     existingTurma.setNome(turma.getNome());
     existingTurma.setAno(turma.getAno());
+    for (Aluno aluno : turma.getAlunos()) {
+      aluno.setTurma(existingTurma);
+    }
     existingTurma.setAlunos(turma.getAlunos());
     existingTurma.setDisciplinas(turma.getDisciplinas());
-    turmaRepository.save(existingTurma);
-    return existingTurma;
+    return turmaRepository.save(existingTurma);
   }
 
   public Turma deleteTurma(long turmaId) {
