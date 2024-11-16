@@ -39,14 +39,25 @@ public class NotaService {
   }
 
   public Nota updateNota(long notaId, Nota nota) {
-    Nota existingNota = notaRepository.findById(notaId).orElseThrow(() -> new RuntimeException("Nota não encontrada"));
-    existingNota.setValor(nota.getValor());
-    existingNota.setDataAvaliacao(nota.getDataAvaliacao());
+    Nota existingNota = notaRepository.findById(notaId)
+        .orElseThrow(() -> new RuntimeException("Nota não encontrada"));
+    // Atualiza os campos que podem ser enviados na requisição
+    if (nota.getValor() != null) {
+      existingNota.setValor(nota.getValor());
+    }
+    if (nota.getDataAvaliacao() != null) {
+      existingNota.setDataAvaliacao(nota.getDataAvaliacao());
+    }
+    // Atualiza o aluno e a disciplina apenas se forem fornecidos
     if (nota.getAluno() != null) {
-      existingNota.setAluno(nota.getAluno());
+      Aluno aluno = alunoRepository.findById(nota.getAluno().getId())
+          .orElseThrow(() -> new RuntimeException("Aluno não encontrado"));
+      existingNota.setAluno(aluno);
     }
     if (nota.getDisciplina() != null) {
-      existingNota.setDisciplina(nota.getDisciplina());
+      Disciplina disciplina = disciplinaRepository.findById(nota.getDisciplina().getId())
+          .orElseThrow(() -> new RuntimeException("Disciplina não encontrada"));
+      existingNota.setDisciplina(disciplina);
     }
     return notaRepository.save(existingNota);
   }
