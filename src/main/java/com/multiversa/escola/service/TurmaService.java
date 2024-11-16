@@ -43,22 +43,28 @@ public class TurmaService {
     return turmaRepository.findAll();
   }
 
-  public Turma updateTurma(long turmaId, Turma turma) {
-    Turma existingTurma = turmaRepository.findById(turmaId).orElseThrow(() -> new RuntimeException("Turma não encontrada"));
-    existingTurma.setNome(turma.getNome());
-    existingTurma.setAno(turma.getAno());
-    for (Aluno aluno : turma.getAlunos()) {
-      aluno.setTurma(existingTurma);
+  public Turma updateTurma(long turmaId, TurmaDTO turmaDTO) {
+    Turma existingTurma = turmaRepository.findById(turmaId)
+        .orElseThrow(() -> new RuntimeException("Turma não encontrada"));
+    // Atualiza os campos básicos
+    existingTurma.setNome(turmaDTO.getNome());
+    existingTurma.setAno(turmaDTO.getAno());
+    // Atualiza os alunos
+    List<Aluno> alunos = alunoRepository.findAllById(turmaDTO.getAlunoIds());
+    for (Aluno aluno : alunos) {
+      aluno.setTurma(existingTurma); // Define a turma para cada aluno
     }
-    existingTurma.setAlunos(turma.getAlunos());
-    existingTurma.setDisciplinas(turma.getDisciplinas());
-    return turmaRepository.save(existingTurma);
+    existingTurma.setAlunos(alunos); // Atualiza a lista de alunos
+    // Atualiza as disciplinas
+    List<Disciplina> disciplinas = disciplinaRepository.findAllById(turmaDTO.getDisciplinaIds());
+    existingTurma.setDisciplinas(disciplinas); // Atualiza a lista de disciplinas
+    return turmaRepository.save(existingTurma); // Salva as alterações
   }
 
   public Turma deleteTurma(long turmaId) {
     Turma existingTurma = turmaRepository.findById(turmaId).orElseThrow(() -> new
         RuntimeException("Turma não encontrada"));
-    turmaRepository.deleteById(turmaId);
+    turmaRepository.delete(existingTurma);
     return existingTurma;
   }
 

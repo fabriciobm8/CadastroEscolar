@@ -19,7 +19,7 @@ public class Turma {
   @Column(name = "ano", nullable = false)
   private int ano;
 
-  @OneToMany(mappedBy = "turma", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "turma", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
   private List<Aluno> alunos;
 
   @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

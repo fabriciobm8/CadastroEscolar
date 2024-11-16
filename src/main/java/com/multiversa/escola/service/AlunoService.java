@@ -35,11 +35,14 @@ public class AlunoService {
     return existingAluno;
   }
 
-  public Aluno deleteAluno(long alunoId) {
-    Aluno existingAluno = alunoRepository.findById(alunoId).orElseThrow(() -> new
-        RuntimeException("Aluno não encontrado"));
-    alunoRepository.deleteById(alunoId);
-    return existingAluno;
+  public void deleteAluno(long alunoId) {
+    Aluno existingAluno = alunoRepository.findById(alunoId)
+        .orElseThrow(() -> new RuntimeException("Aluno não encontrado"));
+    // Se o aluno estiver associado a uma turma, remova a associação
+    if (existingAluno.getTurma() != null) {
+      existingAluno.setTurma(null);
+    }
+    alunoRepository.delete(existingAluno);
   }
 
 }

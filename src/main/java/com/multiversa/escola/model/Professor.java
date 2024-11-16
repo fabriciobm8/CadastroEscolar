@@ -1,5 +1,6 @@
 package com.multiversa.escola.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.List;
 import lombok.Data;
@@ -20,5 +21,9 @@ public class Professor {
 
   @Column(name = "disciplina_principal", nullable = false)
   private String disciplinaPrincipal;
+
+  @OneToMany(mappedBy = "professor", cascade = CascadeType.ALL, orphanRemoval = true)
+  @JsonIgnore
+  private List<Disciplina> disciplinas;
 
 }

@@ -35,11 +35,10 @@ public class ProfessorService {
     return existingProfessor;
   }
 
-  public Professor deleteProfessor(long professorId) {
-    Professor existingProfessor = professorRepository.findById(professorId).orElseThrow(() -> new
-        RuntimeException("Professor não encontrado"));
-    professorRepository.deleteById(professorId);
-    return existingProfessor;
+  public void deleteProfessor(long professorId) {
+    Professor existingProfessor = professorRepository.findById(professorId)
+        .orElseThrow(() -> new RuntimeException("Professor não encontrado"));
+    professorRepository.delete(existingProfessor);
   }
 
 }

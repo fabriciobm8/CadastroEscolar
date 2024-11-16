@@ -33,8 +33,8 @@ public class TurmaController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Turma> updateTurma(@PathVariable long id, @RequestBody Turma turma){
-    Turma updatedTurma = turmaService.updateTurma(id, turma);
+  public ResponseEntity<Turma> updateTurma(@PathVariable long id, @RequestBody TurmaDTO turmaDTO){
+    Turma updatedTurma = turmaService.updateTurma(id, turmaDTO);
     return ResponseEntity.ok(updatedTurma);
   }
 

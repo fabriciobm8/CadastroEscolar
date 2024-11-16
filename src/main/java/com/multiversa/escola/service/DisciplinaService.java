@@ -33,14 +33,18 @@ public class DisciplinaService {
     return disciplinaRepository.findAll();
   }
 
-  public Disciplina updateDisciplina (long disciplinaId, Disciplina disciplina) {
-    Disciplina existingDisciplina = disciplinaRepository.findById(disciplinaId).orElseThrow(() -> new
-        RuntimeException("Disciplina não encontrada"));
+  public Disciplina updateDisciplina(long disciplinaId, Disciplina disciplina) {
+    Disciplina existingDisciplina = disciplinaRepository.findById(disciplinaId)
+        .orElseThrow(() -> new RuntimeException("Disciplina não encontrada"));
+    // Verifique se o professor existe
+    if (disciplina.getProfessor() != null && disciplina.getProfessor().getId() != null) {
+      Professor professor = professorRepository.findById(disciplina.getProfessor().getId())
+          .orElseThrow(() -> new RuntimeException("Professor não encontrado"));
+      existingDisciplina.setProfessor(professor);
+    }
     existingDisciplina.setNome(disciplina.getNome());
     existingDisciplina.setCargaHoraria(disciplina.getCargaHoraria());
-    existingDisciplina.setProfessor(disciplina.getProfessor());
-    disciplinaRepository.save(existingDisciplina);
-    return existingDisciplina;
+    return disciplinaRepository.save(existingDisciplina);
   }
 
   public Disciplina deleteDisciplina(long disciplinaId) {

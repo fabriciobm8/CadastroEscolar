@@ -32,4 +32,8 @@ public class Aluno {
   @JsonIgnore
   private Turma turma;
 
+  @OneToMany(mappedBy = "aluno", cascade = CascadeType.ALL, orphanRemoval = true)
+  @JsonIgnore
+  private List<Nota> notas;
+
 }

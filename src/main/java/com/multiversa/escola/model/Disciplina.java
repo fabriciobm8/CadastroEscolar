@@ -1,5 +1,6 @@
 package com.multiversa.escola.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.List;
 import lombok.Data;
@@ -18,7 +19,11 @@ public class Disciplina {
   @Column(name = "carga_horaria", nullable = false)
   private int cargaHoraria;
 
-  @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @ManyToOne(optional = false, fetch = FetchType.EAGER)
   private Professor professor;
+
+  @OneToMany(mappedBy = "disciplina", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+  @JsonIgnore
+  private List<Nota> notas;
 
 }
