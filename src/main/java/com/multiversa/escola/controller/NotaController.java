@@ -2,6 +2,7 @@ package com.multiversa.escola.controller;
 
 import com.multiversa.escola.model.Nota;
 import com.multiversa.escola.service.NotaService;
+import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,7 @@ public class NotaController {
   NotaService notaService;
 
   @PostMapping
-  public ResponseEntity<Nota> saveNota(@RequestBody Nota nota) {
+  public ResponseEntity<Nota> saveNota(@Valid @RequestBody Nota nota) {
     Nota savedNota = notaService.saveNota(nota);
     return ResponseEntity.ok(savedNota);
   }
@@ -32,7 +33,7 @@ public class NotaController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Nota> updateNota(@PathVariable long id, @RequestBody Nota nota) {
+  public ResponseEntity<Nota> updateNota(@PathVariable long id, @Valid @RequestBody Nota nota) {
     Nota updatedNota = notaService.updateNota(id, nota);
     return ResponseEntity.ok(updatedNota);
   }

@@ -2,6 +2,8 @@ package com.multiversa.escola.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import java.util.List;
 import lombok.Data;
 
@@ -14,6 +16,8 @@ public class Disciplina {
   private Long id;
 
   @Column(name = "nome", nullable = false)
+  @NotBlank(message = "O nome é obrigatório.")
+  @Size(min = 3, max = 50, message = "O nome deve ter entre 3 e 50 caracteres.")
   private String nome;
 
   @Column(name = "carga_horaria", nullable = false)

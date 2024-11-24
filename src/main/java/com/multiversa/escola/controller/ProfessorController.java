@@ -2,6 +2,7 @@ package com.multiversa.escola.controller;
 
 import com.multiversa.escola.model.Professor;
 import com.multiversa.escola.service.ProfessorService;
+import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,7 @@ public class ProfessorController {
   ProfessorService professorService;
 
   @PostMapping
-  public ResponseEntity<Professor> saveProfessor(@RequestBody Professor professor) {
+  public ResponseEntity<Professor> saveProfessor(@Valid @RequestBody Professor professor) {
     Professor savedProfessor = professorService.saveProfessor(professor);
     return ResponseEntity.ok(savedProfessor);
   }
@@ -32,7 +33,7 @@ public class ProfessorController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Professor> updateProfessor(@PathVariable long id, @RequestBody Professor professor){
+  public ResponseEntity<Professor> updateProfessor(@PathVariable long id, @Valid @RequestBody Professor professor){
     Professor updatedProfessor = professorService.updateProfessor(id, professor);
     return ResponseEntity.ok(updatedProfessor);
   }

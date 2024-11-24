@@ -1,6 +1,8 @@
 package com.multiversa.escola.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import java.util.List;
 import lombok.Data;
 

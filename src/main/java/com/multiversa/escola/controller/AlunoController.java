@@ -2,6 +2,7 @@ package com.multiversa.escola.controller;
 
 import com.multiversa.escola.model.Aluno;
 import com.multiversa.escola.service.AlunoService;
+import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,7 @@ public class AlunoController {
   private AlunoService alunoService;
 
   @PostMapping
-  public ResponseEntity<Aluno> saveAluno(@RequestBody Aluno aluno) {
+  public ResponseEntity<Aluno> saveAluno(@Valid @RequestBody Aluno aluno) {
     Aluno savedAluno = alunoService.saveAluno(aluno);
     return ResponseEntity.ok(savedAluno);
   }
@@ -32,7 +33,7 @@ public class AlunoController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Aluno> updateAluno (@PathVariable long id, @RequestBody Aluno aluno) {
+  public ResponseEntity<Aluno> updateAluno (@PathVariable long id, @Valid @RequestBody Aluno aluno) {
     Aluno updatedAluno = alunoService.updateAluno(id, aluno);
     return ResponseEntity.ok(updatedAluno);
   }

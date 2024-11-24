@@ -3,6 +3,7 @@ package com.multiversa.escola.controller;
 import com.multiversa.escola.model.Turma;
 import com.multiversa.escola.model.TurmaDTO;
 import com.multiversa.escola.service.TurmaService;
+import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ public class TurmaController {
   TurmaService turmaService;
 
   @PostMapping
-  public ResponseEntity<Turma> saveTurma(@RequestBody TurmaDTO turmaDTO) {
+  public ResponseEntity<Turma> saveTurma(@Valid @RequestBody TurmaDTO turmaDTO) {
     Turma savedTurma = turmaService.saveTurma(turmaDTO);
     return ResponseEntity.ok(savedTurma);
   }
@@ -33,7 +34,7 @@ public class TurmaController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Turma> updateTurma(@PathVariable long id, @RequestBody TurmaDTO turmaDTO){
+  public ResponseEntity<Turma> updateTurma(@PathVariable long id, @Valid @RequestBody TurmaDTO turmaDTO){
     Turma updatedTurma = turmaService.updateTurma(id, turmaDTO);
     return ResponseEntity.ok(updatedTurma);
   }
