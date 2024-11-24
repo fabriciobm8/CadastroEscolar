@@ -30,4 +30,11 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
   }
 
+  //Capturar erro de email ja cadastrado
+  @ExceptionHandler(EmailJaCadastradoException.class)
+  public ResponseEntity<String> handleEmailJaCadastradoException(EmailJaCadastradoException ex) {
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+  }
+
+
 }

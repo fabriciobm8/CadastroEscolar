@@ -1,5 +1,6 @@
 package com.multiversa.escola.service;
 
+import com.multiversa.escola.exception.EmailJaCadastradoException;
 import com.multiversa.escola.exception.IdNaoEncontradoException;
 import com.multiversa.escola.model.Aluno;
 import com.multiversa.escola.repository.AlunoRepository;
@@ -17,6 +18,9 @@ public class AlunoService {
   private NotaRepository notaRepository;
 
   public Aluno saveAluno(Aluno aluno) {
+    if (alunoRepository.existsByEmail(aluno.getEmail())) {
+      throw new EmailJaCadastradoException("E-mail já cadastrado no sistema");
+    }
     return alunoRepository.save(aluno);
   }
 
@@ -32,6 +36,9 @@ public class AlunoService {
   public Aluno updateAluno(long alunoId, Aluno aluno) {
     Aluno existingAluno = alunoRepository.findById(alunoId)
         .orElseThrow(() -> new IdNaoEncontradoException("Aluno com ID " + alunoId + " não foi encontrado."));
+    if (alunoRepository.existsByEmailAndIdNot(aluno.getEmail(), alunoId)) {
+      throw new EmailJaCadastradoException("E-mail já cadastrado no sistema");
+    }
     existingAluno.setNome(aluno.getNome());
     existingAluno.setMatricula(aluno.getMatricula());
     existingAluno.setEmail(aluno.getEmail());
