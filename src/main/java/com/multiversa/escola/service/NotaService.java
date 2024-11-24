@@ -1,5 +1,6 @@
 package com.multiversa.escola.service;
 
+import com.multiversa.escola.exception.IdNaoEncontradoException;
 import com.multiversa.escola.model.Nota;
 import com.multiversa.escola.model.Aluno;
 import com.multiversa.escola.model.Disciplina;
@@ -31,7 +32,7 @@ public class NotaService {
   }
 
   public Nota getNota(long notaId) {
-    return notaRepository.findById(notaId).orElseThrow(() -> new RuntimeException("Nota não encontrada"));
+    return notaRepository.findById(notaId).orElseThrow(() -> new IdNaoEncontradoException("Nota com ID " + notaId + " não foi encontrada."));
   }
 
   public List<Nota> getNotas() {
@@ -40,7 +41,7 @@ public class NotaService {
 
   public Nota updateNota(long notaId, Nota nota) {
     Nota existingNota = notaRepository.findById(notaId)
-        .orElseThrow(() -> new RuntimeException("Nota não encontrada"));
+        .orElseThrow(() -> new IdNaoEncontradoException("Nota com ID " + notaId + " não foi encontrada."));
     // Atualiza os campos que podem ser enviados na requisição
     if (nota.getValor() != null) {
       existingNota.setValor(nota.getValor());
@@ -64,7 +65,7 @@ public class NotaService {
 
   public void deleteNota(long notaId) {
     Nota existingNota = notaRepository.findById(notaId)
-        .orElseThrow(() -> new RuntimeException("Nota não encontrada"));
+        .orElseThrow(() -> new IdNaoEncontradoException("Nota com ID " + notaId + " não foi encontrada."));
     notaRepository.delete(existingNota);
   }
 }

@@ -1,5 +1,6 @@
 package com.multiversa.escola.service;
 
+import com.multiversa.escola.exception.IdNaoEncontradoException;
 import com.multiversa.escola.model.Disciplina;
 import com.multiversa.escola.model.Professor;
 import com.multiversa.escola.model.Turma;
@@ -31,8 +32,8 @@ public class DisciplinaService {
     return disciplinaRepository.save(disciplina);
   }
   public Disciplina getDisciplina(long disciplinaId) {
-    return disciplinaRepository.findById(disciplinaId).orElseThrow(() -> new
-        RuntimeException("Disciplina nao encontrada"));
+    return disciplinaRepository.findById(disciplinaId)
+        .orElseThrow(() -> new IdNaoEncontradoException("Disciplina com ID " + disciplinaId + " não foi encontrada."));
   }
 
   public List<Disciplina> getDisciplinas() {
@@ -41,7 +42,7 @@ public class DisciplinaService {
 
   public Disciplina updateDisciplina(long disciplinaId, Disciplina disciplina) {
     Disciplina existingDisciplina = disciplinaRepository.findById(disciplinaId)
-        .orElseThrow(() -> new RuntimeException("Disciplina não encontrada"));
+        .orElseThrow(() -> new IdNaoEncontradoException("Disciplina com ID " + disciplinaId + " não foi encontrada."));
     // Verifique se o professor existe
     if (disciplina.getProfessor() != null && disciplina.getProfessor().getId() != null) {
       Professor professor = professorRepository.findById(disciplina.getProfessor().getId())
@@ -55,7 +56,7 @@ public class DisciplinaService {
 
   public void deleteDisciplina(long disciplinaId) {
     Disciplina existingDisciplina = disciplinaRepository.findById(disciplinaId)
-        .orElseThrow(() -> new RuntimeException("Disciplina não encontrada"));
+        .orElseThrow(() -> new IdNaoEncontradoException("Disciplina com ID " + disciplinaId + " não foi encontrada."));
     // Remove todas as notas associadas à disciplina
     notaRepository.deleteAll(existingDisciplina.getNotas());
     // Remove a disciplina de todas as turmas que a contêm

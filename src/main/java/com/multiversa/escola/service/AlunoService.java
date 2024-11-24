@@ -1,5 +1,6 @@
 package com.multiversa.escola.service;
 
+import com.multiversa.escola.exception.IdNaoEncontradoException;
 import com.multiversa.escola.model.Aluno;
 import com.multiversa.escola.repository.AlunoRepository;
 import com.multiversa.escola.repository.NotaRepository;
@@ -20,7 +21,8 @@ public class AlunoService {
   }
 
   public Aluno getAluno(long alunoId) {
-    return alunoRepository.findById(alunoId).orElseThrow(() -> new RuntimeException("Aluno não encontrado"));
+    return alunoRepository.findById(alunoId)
+        .orElseThrow(() -> new IdNaoEncontradoException("Aluno com ID " + alunoId + " não foi encontrado."));
   }
 
   public List<Aluno> getAlunos() {
@@ -28,8 +30,8 @@ public class AlunoService {
   }
 
   public Aluno updateAluno(long alunoId, Aluno aluno) {
-    Aluno existingAluno = alunoRepository.findById(alunoId).orElseThrow(() -> new
-        RuntimeException("Aluno não encontrado"));
+    Aluno existingAluno = alunoRepository.findById(alunoId)
+        .orElseThrow(() -> new IdNaoEncontradoException("Aluno com ID " + alunoId + " não foi encontrado."));
     existingAluno.setNome(aluno.getNome());
     existingAluno.setMatricula(aluno.getMatricula());
     existingAluno.setEmail(aluno.getEmail());
@@ -40,7 +42,7 @@ public class AlunoService {
 
   public void deleteAluno(long alunoId) {
     Aluno existingAluno = alunoRepository.findById(alunoId)
-        .orElseThrow(() -> new RuntimeException("Aluno não encontrado"));
+        .orElseThrow(() -> new IdNaoEncontradoException("Aluno com ID " + alunoId + " não foi encontrado."));
     // Remove todas as notas associadas ao aluno
     notaRepository.deleteAll(existingAluno.getNotas());
     // Remove a referência da turma

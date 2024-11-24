@@ -2,6 +2,7 @@ package com.multiversa.escola.exception;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -20,6 +21,13 @@ public class GlobalExceptionHandler {
       erros.put(error.getField(), error.getDefaultMessage());
     }
     return ResponseEntity.badRequest().body(erros);
+  }
+
+  // Capturar erros de usuário não encontrado
+  @ExceptionHandler(IdNaoEncontradoException.class)
+  public ResponseEntity<String>
+  handleIdNaoEncontradoException(IdNaoEncontradoException ex) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
   }
 
 }

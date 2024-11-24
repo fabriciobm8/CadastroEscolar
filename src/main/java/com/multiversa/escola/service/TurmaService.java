@@ -1,5 +1,6 @@
 package com.multiversa.escola.service;
 
+import com.multiversa.escola.exception.IdNaoEncontradoException;
 import com.multiversa.escola.model.Aluno;
 import com.multiversa.escola.model.Disciplina;
 import com.multiversa.escola.model.Turma;
@@ -36,7 +37,8 @@ public class TurmaService {
   }
 
   public Turma getTurma(long turmaId) {
-    return turmaRepository.findById(turmaId).orElseThrow(() -> new RuntimeException("Turma não encontrada"));
+    return turmaRepository.findById(turmaId)
+        .orElseThrow(() -> new IdNaoEncontradoException("Turma com ID " + turmaId + " não foi encontrada."));
   }
 
   public List<Turma> getTurmas() {
@@ -45,7 +47,7 @@ public class TurmaService {
 
   public Turma updateTurma(long turmaId, TurmaDTO turmaDTO) {
     Turma existingTurma = turmaRepository.findById(turmaId)
-        .orElseThrow(() -> new RuntimeException("Turma não encontrada"));
+        .orElseThrow(() -> new IdNaoEncontradoException("Turma com ID " + turmaId + " não foi encontrada."));
     // Atualiza os campos básicos
     existingTurma.setNome(turmaDTO.getNome());
     existingTurma.setAno(turmaDTO.getAno());
@@ -63,7 +65,7 @@ public class TurmaService {
 
   public void deleteTurma(long turmaId) {
     Turma existingTurma = turmaRepository.findById(turmaId)
-        .orElseThrow(() -> new RuntimeException("Turma não encontrada"));
+        .orElseThrow(() -> new IdNaoEncontradoException("Turma com ID " + turmaId + " não foi encontrada."));
     // Remove as referências dos alunos à turma
     for (Aluno aluno : existingTurma.getAlunos()) {
       aluno.setTurma(null);
