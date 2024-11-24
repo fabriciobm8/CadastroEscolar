@@ -1,6 +1,7 @@
 package com.multiversa.escola.service;
 
 import com.multiversa.escola.exception.IdNaoEncontradoException;
+import com.multiversa.escola.exception.ListaVaziaException;
 import com.multiversa.escola.model.Nota;
 import com.multiversa.escola.model.Aluno;
 import com.multiversa.escola.model.Disciplina;
@@ -23,9 +24,9 @@ public class NotaService {
 
   public Nota saveNota(Nota nota) {
     Aluno aluno = alunoRepository.findById(nota.getAluno().getId())
-        .orElseThrow(() -> new RuntimeException("Aluno não encontrado"));
+        .orElseThrow(() -> new IdNaoEncontradoException("Aluno não encontrado"));
     Disciplina disciplina = disciplinaRepository.findById(nota.getDisciplina().getId())
-        .orElseThrow(() -> new RuntimeException("Disciplina não encontrada"));
+        .orElseThrow(() -> new IdNaoEncontradoException("Disciplina não encontrada"));
     nota.setAluno(aluno);
     nota.setDisciplina(disciplina);
     return notaRepository.save(nota);
@@ -36,7 +37,11 @@ public class NotaService {
   }
 
   public List<Nota> getNotas() {
-    return notaRepository.findAll();
+    List<Nota> notas = notaRepository.findAll();
+    if(notas.isEmpty()) {
+      throw new ListaVaziaException("Não existem notas cadastradas no sistema.");
+    }
+    return notas;
   }
 
   public Nota updateNota(long notaId, Nota nota) {
@@ -52,12 +57,12 @@ public class NotaService {
     // Atualiza o aluno e a disciplina apenas se forem fornecidos
     if (nota.getAluno() != null) {
       Aluno aluno = alunoRepository.findById(nota.getAluno().getId())
-          .orElseThrow(() -> new RuntimeException("Aluno não encontrado"));
+          .orElseThrow(() -> new IdNaoEncontradoException("Aluno não encontrado"));
       existingNota.setAluno(aluno);
     }
     if (nota.getDisciplina() != null) {
       Disciplina disciplina = disciplinaRepository.findById(nota.getDisciplina().getId())
-          .orElseThrow(() -> new RuntimeException("Disciplina não encontrada"));
+          .orElseThrow(() -> new IdNaoEncontradoException("Disciplina não encontrada"));
       existingNota.setDisciplina(disciplina);
     }
     return notaRepository.save(existingNota);

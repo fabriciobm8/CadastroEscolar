@@ -2,6 +2,7 @@ package com.multiversa.escola.service;
 
 import com.multiversa.escola.exception.EmailJaCadastradoException;
 import com.multiversa.escola.exception.IdNaoEncontradoException;
+import com.multiversa.escola.exception.ListaVaziaException;
 import com.multiversa.escola.model.Aluno;
 import com.multiversa.escola.repository.AlunoRepository;
 import com.multiversa.escola.repository.NotaRepository;
@@ -30,7 +31,11 @@ public class AlunoService {
   }
 
   public List<Aluno> getAlunos() {
-    return alunoRepository.findAll();
+    List<Aluno> alunos = alunoRepository.findAll();
+    if (alunos.isEmpty()) {
+      throw new ListaVaziaException("Não existem alunos cadastrados no sistema.");
+    }
+    return alunos;
   }
 
   public Aluno updateAluno(long alunoId, Aluno aluno) {

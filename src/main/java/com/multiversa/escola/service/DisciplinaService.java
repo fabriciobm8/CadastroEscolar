@@ -1,6 +1,8 @@
 package com.multiversa.escola.service;
 
 import com.multiversa.escola.exception.IdNaoEncontradoException;
+import com.multiversa.escola.exception.ListaVaziaException;
+import com.multiversa.escola.model.Aluno;
 import com.multiversa.escola.model.Disciplina;
 import com.multiversa.escola.model.Professor;
 import com.multiversa.escola.model.Turma;
@@ -26,7 +28,7 @@ public class DisciplinaService {
 
   public Disciplina saveDisciplina(Disciplina disciplina, Long professorId) {
     Professor professor = professorRepository.findById(professorId)
-        .orElseThrow(() -> new RuntimeException("Professor não encontrado"));
+        .orElseThrow(() -> new IdNaoEncontradoException("Professor com ID "+professorId+" não encontrado"));
 
     disciplina.setProfessor(professor);
     return disciplinaRepository.save(disciplina);
@@ -37,7 +39,11 @@ public class DisciplinaService {
   }
 
   public List<Disciplina> getDisciplinas() {
-    return disciplinaRepository.findAll();
+    List<Disciplina> disciplinas = disciplinaRepository.findAll();
+    if(disciplinas.isEmpty()) {
+      throw new ListaVaziaException("Nao existem disciplinas cadastradas no sistema.");
+    }
+    return disciplinas;
   }
 
   public Disciplina updateDisciplina(long disciplinaId, Disciplina disciplina) {
@@ -46,7 +52,7 @@ public class DisciplinaService {
     // Verifique se o professor existe
     if (disciplina.getProfessor() != null && disciplina.getProfessor().getId() != null) {
       Professor professor = professorRepository.findById(disciplina.getProfessor().getId())
-          .orElseThrow(() -> new RuntimeException("Professor não encontrado"));
+          .orElseThrow(() -> new IdNaoEncontradoException("Professor não encontrado"));
       existingDisciplina.setProfessor(professor);
     }
     existingDisciplina.setNome(disciplina.getNome());

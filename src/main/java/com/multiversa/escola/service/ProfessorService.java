@@ -2,6 +2,7 @@ package com.multiversa.escola.service;
 
 import com.multiversa.escola.exception.EmailJaCadastradoException;
 import com.multiversa.escola.exception.IdNaoEncontradoException;
+import com.multiversa.escola.exception.ListaVaziaException;
 import com.multiversa.escola.model.Disciplina;
 import com.multiversa.escola.model.Professor;
 import com.multiversa.escola.repository.DisciplinaRepository;
@@ -31,7 +32,11 @@ public class ProfessorService {
   }
 
   public List<Professor> getProfessors() {
-    return professorRepository.findAll();
+    List<Professor> professors = professorRepository.findAll();
+    if(professors.isEmpty()) {
+      throw new ListaVaziaException("Não existem professores cadastrados no sistema.");
+    }
+    return professors;
   }
 
   public Professor updateProfessor(long professorId, Professor professor) {

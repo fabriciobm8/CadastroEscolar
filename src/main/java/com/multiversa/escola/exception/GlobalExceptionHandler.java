@@ -36,5 +36,17 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
   }
 
+  //Capturar erro de lista vazia (getAll)
+  @ExceptionHandler(ListaVaziaException.class)
+  public ResponseEntity<String> handleListaVaziaException(ListaVaziaException ex) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+  }
+
+  // Capturar outras exceções genéricas
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<String> handleGenericException(Exception ex) {
+    return
+        ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro inesperado: " + ex.getMessage());
+  }
 
 }

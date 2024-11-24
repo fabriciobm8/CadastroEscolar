@@ -1,6 +1,7 @@
 package com.multiversa.escola.service;
 
 import com.multiversa.escola.exception.IdNaoEncontradoException;
+import com.multiversa.escola.exception.ListaVaziaException;
 import com.multiversa.escola.model.Aluno;
 import com.multiversa.escola.model.Disciplina;
 import com.multiversa.escola.model.Turma;
@@ -42,7 +43,11 @@ public class TurmaService {
   }
 
   public List<Turma> getTurmas() {
-    return turmaRepository.findAll();
+    List<Turma> turmas = turmaRepository.findAll();
+    if (turmas.isEmpty()) {
+      throw new ListaVaziaException("Não existem turmas cadastradas no sistema.");
+    }
+    return turmas;
   }
 
   public Turma updateTurma(long turmaId, TurmaDTO turmaDTO) {
