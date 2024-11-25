@@ -27,6 +27,18 @@ public class AlunoController {
     return ResponseEntity.ok(aluno);
   }
 
+  @GetMapping("/email/{email}")
+  public ResponseEntity<Aluno> getAlunoByEmail(@PathVariable String email) {
+    Aluno aluno = alunoService.getEmail(email);
+    return ResponseEntity.ok(aluno);
+  }
+
+  @GetMapping("/matricula/{matricula}")
+  public ResponseEntity<Aluno> getAlunoByMatricula(@PathVariable String matricula) {
+    Aluno aluno = alunoService.getMatricula(matricula);
+    return ResponseEntity.ok(aluno);
+  }
+
   @GetMapping("/alunos")
   public List<Aluno> getAllAlunos() {
     return alunoService.getAlunos();

@@ -30,6 +30,16 @@ public class AlunoService {
         .orElseThrow(() -> new IdNaoEncontradoException("Aluno com ID " + alunoId + " não foi encontrado."));
   }
 
+  public Aluno getEmail(String email) {
+    return alunoRepository.findByEmail(email)
+        .orElseThrow(() -> new IdNaoEncontradoException("Aluno com email " + email + " não foi encontrado."));
+  }
+
+  public Aluno getMatricula(String matricula) {
+    return alunoRepository.findByMatricula(matricula)
+        .orElseThrow(() -> new IdNaoEncontradoException("Aluno com matrícula " + matricula + " não foi encontrado."));
+  }
+
   public List<Aluno> getAlunos() {
     List<Aluno> alunos = alunoRepository.findAll();
     if (alunos.isEmpty()) {

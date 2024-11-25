@@ -1,5 +1,6 @@
 package com.multiversa.escola.exception;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
@@ -8,6 +9,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -40,6 +42,13 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(ListaVaziaException.class)
   public ResponseEntity<String> handleListaVaziaException(ListaVaziaException ex) {
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+  }
+
+  //Capturar Aluno já pertencendo a uma turma
+  @ExceptionHandler(AlunoExistenteNaTurmaException.class)
+  public ResponseEntity<String> handleAlunoExisteNaTurmaException(
+      AlunoExistenteNaTurmaException ex) {
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
   }
 
   // Capturar outras exceções genéricas

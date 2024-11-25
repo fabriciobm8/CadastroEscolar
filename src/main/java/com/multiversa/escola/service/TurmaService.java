@@ -1,5 +1,6 @@
 package com.multiversa.escola.service;
 
+import com.multiversa.escola.exception.AlunoExistenteNaTurmaException;
 import com.multiversa.escola.exception.IdNaoEncontradoException;
 import com.multiversa.escola.exception.ListaVaziaException;
 import com.multiversa.escola.model.Aluno;
@@ -23,11 +24,25 @@ public class TurmaService {
   @Autowired
   DisciplinaRepository disciplinaRepository;
 
+  private void validateAlunosNotInOtherTurma(List<Aluno> alunos) {
+    for (Aluno aluno : alunos) {
+      if (aluno.getTurma() != null) {
+        throw new AlunoExistenteNaTurmaException(
+            String.format("O aluno %s (ID: %d) já está matriculado na %s",
+                aluno.getNome(),
+                aluno.getId(),
+                aluno.getTurma().getNome())
+        );
+      }
+    }
+  }
+
   public Turma saveTurma(TurmaDTO turmaDTO) {
+    List<Aluno> alunos = alunoRepository.findAllById(turmaDTO.getAlunoIds());
+    validateAlunosNotInOtherTurma(alunos);
     Turma turma = new Turma();
     turma.setNome(turmaDTO.getNome());
     turma.setAno(turmaDTO.getAno());
-    List<Aluno> alunos = alunoRepository.findAllById(turmaDTO.getAlunoIds());
     for (Aluno aluno : alunos) {
       aluno.setTurma(turma);
     }
@@ -53,19 +68,34 @@ public class TurmaService {
   public Turma updateTurma(long turmaId, TurmaDTO turmaDTO) {
     Turma existingTurma = turmaRepository.findById(turmaId)
         .orElseThrow(() -> new IdNaoEncontradoException("Turma com ID " + turmaId + " não foi encontrada."));
-    // Atualiza os campos básicos
+    List<Aluno> newAlunos = alunoRepository.findAllById(turmaDTO.getAlunoIds());
+    // Remove os alunos que não estão mais na turma
+    for (Aluno currentAluno : existingTurma.getAlunos()) {
+      if (!turmaDTO.getAlunoIds().contains(currentAluno.getId())) {
+        currentAluno.setTurma(null);
+        alunoRepository.save(currentAluno);
+      }
+    }
+    // Valida e adiciona novos alunos
+    for (Aluno newAluno : newAlunos) {
+      if (newAluno.getTurma() != null && !newAluno.getTurma().getId().equals(turmaId)) {
+        throw new AlunoExistenteNaTurmaException(
+            String.format("O aluno %s (ID: %d) já está matriculado na %s",
+                newAluno.getNome(),
+                newAluno.getId(),
+                newAluno.getTurma().getNome())
+        );
+      }
+    }
     existingTurma.setNome(turmaDTO.getNome());
     existingTurma.setAno(turmaDTO.getAno());
-    // Atualiza os alunos
-    List<Aluno> alunos = alunoRepository.findAllById(turmaDTO.getAlunoIds());
-    for (Aluno aluno : alunos) {
-      aluno.setTurma(existingTurma); // Define a turma para cada aluno
+    for (Aluno aluno : newAlunos) {
+      aluno.setTurma(existingTurma);
     }
-    existingTurma.setAlunos(alunos); // Atualiza a lista de alunos
-    // Atualiza as disciplinas
+    existingTurma.setAlunos(newAlunos);
     List<Disciplina> disciplinas = disciplinaRepository.findAllById(turmaDTO.getDisciplinaIds());
-    existingTurma.setDisciplinas(disciplinas); // Atualiza a lista de disciplinas
-    return turmaRepository.save(existingTurma); // Salva as alterações
+    existingTurma.setDisciplinas(disciplinas);
+    return turmaRepository.save(existingTurma);
   }
 
   public void deleteTurma(long turmaId) {
