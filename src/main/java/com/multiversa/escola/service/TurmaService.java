@@ -39,6 +39,9 @@ public class TurmaService {
 
   public Turma saveTurma(TurmaDTO turmaDTO) {
     List<Aluno> alunos = alunoRepository.findAllById(turmaDTO.getAlunoIds());
+    if (alunos.size() != turmaDTO.getAlunoIds().size()) {
+      throw new IdNaoEncontradoException("Um ou mais alunos não foram encontrados.");
+    }
     validateAlunosNotInOtherTurma(alunos);
     Turma turma = new Turma();
     turma.setNome(turmaDTO.getNome());
@@ -69,6 +72,9 @@ public class TurmaService {
     Turma existingTurma = turmaRepository.findById(turmaId)
         .orElseThrow(() -> new IdNaoEncontradoException("Turma com ID " + turmaId + " não foi encontrada."));
     List<Aluno> newAlunos = alunoRepository.findAllById(turmaDTO.getAlunoIds());
+    if (newAlunos.size() != turmaDTO.getAlunoIds().size()) {
+      throw new IdNaoEncontradoException("Um ou mais alunos não foram encontrados.");
+    }
     // Remove os alunos que não estão mais na turma
     for (Aluno currentAluno : existingTurma.getAlunos()) {
       if (!turmaDTO.getAlunoIds().contains(currentAluno.getId())) {

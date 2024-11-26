@@ -4,8 +4,10 @@ import com.multiversa.escola.exception.EmailJaCadastradoException;
 import com.multiversa.escola.exception.IdNaoEncontradoException;
 import com.multiversa.escola.exception.ListaVaziaException;
 import com.multiversa.escola.model.Aluno;
+import com.multiversa.escola.model.Turma;
 import com.multiversa.escola.repository.AlunoRepository;
 import com.multiversa.escola.repository.NotaRepository;
+import com.multiversa.escola.repository.TurmaRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,9 @@ public class AlunoService {
   private AlunoRepository alunoRepository;
   @Autowired
   private NotaRepository notaRepository;
+
+  @Autowired
+  private TurmaRepository turmaRepository;
 
   public Aluno saveAluno(Aluno aluno) {
     if (alunoRepository.existsByEmail(aluno.getEmail())) {
@@ -65,12 +70,13 @@ public class AlunoService {
   public void deleteAluno(long alunoId) {
     Aluno existingAluno = alunoRepository.findById(alunoId)
         .orElseThrow(() -> new IdNaoEncontradoException("Aluno com ID " + alunoId + " não foi encontrado."));
-    // Remove todas as notas associadas ao aluno
-    notaRepository.deleteAll(existingAluno.getNotas());
-    // Remove a referência da turma
+
+    // Se o aluno tem uma turma associada, remova-o da turma
     if (existingAluno.getTurma() != null) {
-      existingAluno.setTurma(null);
-      alunoRepository.save(existingAluno);
+      Turma turma = existingAluno.getTurma();
+      turma.getAlunos().remove(existingAluno); // Remove o aluno da turma
+      existingAluno.setTurma(null); // Remove a referência do aluno à turma
+      turmaRepository.save(turma); // Salva a turma com a referência removida
     }
     alunoRepository.delete(existingAluno);
   }
