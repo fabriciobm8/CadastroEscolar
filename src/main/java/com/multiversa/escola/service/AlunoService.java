@@ -71,7 +71,7 @@ public class AlunoService {
     Aluno existingAluno = alunoRepository.findById(alunoId)
         .orElseThrow(() -> new IdNaoEncontradoException("Aluno com ID " + alunoId + " não foi encontrado."));
 
-    // Se o aluno tem uma turma associada, remova-o da turma
+    // Remove aluno de turma associada
     if (existingAluno.getTurma() != null) {
       Turma turma = existingAluno.getTurma();
       turma.getAlunos().remove(existingAluno); // Remove o aluno da turma
