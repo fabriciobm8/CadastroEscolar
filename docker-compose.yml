@@ -3,7 +3,7 @@ version: '3.8'
 services:
   java-api:
     build:
-      context: .          # Usa o Dockerfile no diretório atual
+      context: .
       dockerfile: Dockerfile
     container_name: java-api
     ports:
